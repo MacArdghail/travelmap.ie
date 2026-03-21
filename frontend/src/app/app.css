@@ -1,15 +1,118 @@
-.country-item[data-status="normal-precautions"] {
-  background-color: #00ba42;
+.country-item {
+  &[data-status="normal-precautions"] {
+    background-color: #00ba42;
+  }
+
+  &[data-status="high-degree-of-caution"] {
+    background-color: #ffc300;
+  }
+
+  &[data-status="avoid-non-essential-travel"] {
+    background-color: #f07400;
+  }
+
+  &[data-status="do-not-travel"] {
+    background-color: #f00000;
+  }
 }
 
-.country-item[data-status="high-degree-of-caution"] {
-  background-color: #ffc300;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 9.6rem;
+  padding: 0 4.8rem;
+
+  h1 {
+    font-size: 3.2rem;
+    font-family: 'Manrope', sans-serif;
+    color: #1B2B44;
+  }
 }
 
-.country-item[data-status="avoid-non-essential-travel"] {
-  background-color: #f07400;
+button {
+  padding: 1.2rem 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+  color: white;
+  background-color: #1B2B44;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
 }
 
-.country-item[data-status="do-not-travel"] {
-  background-color:  #f00000;
+.footer {
+  margin-top: 6rem;
+  padding: 4rem 2rem 2rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+.footer-left {
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.8rem;
+    font-family: 'Manrope', sans-serif;
+    color: #1B2B44;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 1.4rem;
+    max-width: 60rem;
+  }
+}
+
+.footer-right {
+  a {
+    color: #1B2B44;
+    text-decoration: none;
+    font-size: 1.4rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.disclaimer {
+  padding: 2rem;
+  color: #455A64;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #00695C;
+  }
+}
+
+.MacArdghail {
+  color: #1B2B44;
+  font-weight: bold;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

@@ -1,4 +1,8 @@
-<h1>Irish Travel Advice Mapped</h1>
+<header class="header">
+  <h1>Irish Travel Advice Mapped</h1>
+  <button (click)="openDFAWebsite()">Visit Official DFA Advice</button>
+</header>
+
 @for (country of countries; track country.slug; let i = $index) {
   <div class="country-item" [attr.data-status]="country.status">
     <span class="country-name"> {{i + 1}}: {{ 'countries.' + country.slug | translate }}</span>
@@ -9,5 +13,28 @@
 @if (lastUpdated) {
   <p>Last updated: {{ lastUpdated }}</p>
 }
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <h3>Irish Travel Advice Mapped</h3>
+      <p>Visualizing official Irish travel advisories on an interactive map. Data taken directly from the Department of Foreign Affairs.</p>
+    </div>
+    <div class="footer-right">
+      <a href="https://github.com/MacArdghail/traveladvicemap" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </div>
+  <div class="disclaimer">
+    Disclaimer: This is an independent website and is not affiliated with the Irish Department of Foreign Affairs. 
+    All travel advisory data is scraped from official DFA sources and displayed on a map for easier visualization. 
+    Always verify current travel advice directly at 
+    <a href="https://www.ireland.ie/en/dfa/overseas-travel/advice/" target="_blank" rel="noopener noreferrer">www.ireland.ie</a> 
+    before making travel decisions.
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Irish Travel Advice Mapped. Not an official government website.</p>
+    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail">@MacArdghail</a></p>
+  </div>
+</footer>
 
 <router-outlet />

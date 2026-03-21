@@ -28,12 +28,16 @@ export class App {
     })
 
     this.http.get<CountryData>('/travel_advice.json').subscribe((statusData) => {
-        this.countries = Object.entries(statusData).map(
-          ([slug, status]) => ({
-            slug,
-            status
-          })
-        )
-      })
+      this.countries = Object.entries(statusData).map(
+        ([slug, status]) => ({
+          slug,
+          status
+        })
+      )
+    })
+  }
+
+  openDFAWebsite() {
+    window.open('https://www.ireland.ie/en/dfa/overseas-travel/advice/', '_blank');
   }
 }
