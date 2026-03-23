@@ -22,7 +22,7 @@ jobs:
           playwright install-deps
 
       - run: |
-          python travel_updates.py > frontend/public/country_status.json
+          python travel_advice.py > frontend/public/travel_advice.json
 
       - run: |
           echo "{\"lastUpdated\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > frontend/public/metadata.json
