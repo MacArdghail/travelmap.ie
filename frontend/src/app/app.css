@@ -132,7 +132,11 @@ button {
 }
 
 .map-container {
-  padding: 6rem;
+  padding: 4rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
 }
 
 .map {
@@ -152,7 +156,8 @@ button {
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    gap: 1.5rem;
+    justify-content: flex-start;
+    gap: 1rem;
   }
 }
 
@@ -163,6 +168,11 @@ button {
   background-color: #f5f3f5;
   padding: 8px 12px;
   border-radius: 12px;
+
+  @media (max-width: 768px) {
+    gap: 0.6rem;
+    padding: 6px 10px;
+  }
 }
 
 .legend-color {
@@ -193,7 +203,7 @@ button {
   color: #1B2B44;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 }
 
@@ -210,7 +220,10 @@ button {
   text-align: right;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    justify-content: flex-start;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    text-align: left;
   }
 }
 
