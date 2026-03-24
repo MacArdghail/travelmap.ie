@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TranslatePipe } from './translate.pipe';
 import { MapService } from './map.service';
+import { inject } from '@vercel/analytics';
 
 interface CountryData {
   [key: string]: string
@@ -28,7 +29,12 @@ export class App {
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
     private mapService: MapService
-  ) {}
+  ) {
+    // Initialize Vercel Analytics
+    if (isPlatformBrowser(this.platformId)) {
+      inject();
+    }
+  }
 
   ngOnInit() {
     this.http.get<{ lastUpdated: string }>('/metadata.json').subscribe((metadata) => {
