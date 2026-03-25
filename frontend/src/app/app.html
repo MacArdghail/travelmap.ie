@@ -3,39 +3,40 @@
   <button (click)="openDFAWebsite()">Visit Official DFA Advice</button>
 </header>
 
-<div class="map-container">
-  <div #map class="map"></div>
-  <div class="legend">
-    <div class="legend-item">
-      <div class="legend-color normal-precautions"></div>
-      <span class="legend-label">{{ 'levels.normal-precautions' | translate | uppercase }}</span>
+<main>
+  <div class="map-container">
+    <div #map class="map"></div>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color normal-precautions"></div>
+        <span class="legend-label">{{ 'levels.normal-precautions' | translate | uppercase }}</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color high-degree-of-caution"></div>
+        <span class="legend-label">{{ 'levels.high-degree-of-caution' | translate | uppercase }}</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color avoid-non-essential-travel"></div>
+        <span class="legend-label">{{ 'levels.avoid-non-essential-travel' | translate | uppercase }}</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color do-not-travel"></div>
+        <span class="legend-label">{{ 'levels.do-not-travel' | translate | uppercase }}</span>
+      </div>
     </div>
-    <div class="legend-item">
-      <div class="legend-color high-degree-of-caution"></div>
-      <span class="legend-label">{{ 'levels.high-degree-of-caution' | translate | uppercase }}</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-color avoid-non-essential-travel"></div>
-      <span class="legend-label">{{ 'levels.avoid-non-essential-travel' | translate | uppercase }}</span>
-    </div>
-    <div class="legend-item">
-      <div class="legend-color do-not-travel"></div>
-      <span class="legend-label">{{ 'levels.do-not-travel' | translate | uppercase }}</span>
-    </div>
+
+    @if (lastUpdated) {
+      <div class="last-updated">
+        <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>LAST UPDATED: {{ lastUpdated }}</span>
+      </div>
+    }
   </div>
 
-  @if (lastUpdated) {
-    <div class="last-updated">
-      <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"></circle>
-        <polyline points="12 6 12 12 16 14"></polyline>
-      </svg>
-      <span>LAST UPDATED: {{ lastUpdated }}</span>
-    </div>
-  }
-</div>
-
-<div class="countries-section">
+  <div class="countries-section">
   <h2 class="countries-title">All Travel Advisories</h2>
   <div class="filters-container">
     <div class="search-container">
@@ -53,7 +54,9 @@
     </div>
 
     <div class="level-filter">
+      <label for="level-select" class="visually-hidden">Filter by advisory level</label>
       <select 
+        id="level-select"
         class="level-select" 
         [(ngModel)]="selectedLevel"
         (change)="filterCountries()"
@@ -106,6 +109,7 @@
     }
   }
 </div>
+</main>
 
 <footer class="footer">
   <div class="footer-content">
@@ -118,7 +122,7 @@
     </div>
   </div>
   <div class="disclaimer">
-    Disclaimer: This is an independent website and is not affiliated with the Irish Department of Foreign Affairs. 
+    <strong>Disclaimer:</strong> This is an independent website and is not affiliated with the Irish Department of Foreign Affairs. 
     All travel advisory data is scraped from official DFA sources and displayed on a map for easier visualization. 
     Always verify current travel advice directly at 
     <a href="https://www.ireland.ie/en/dfa/overseas-travel/advice/" target="_blank" rel="noopener noreferrer">www.ireland.ie</a> 
@@ -126,7 +130,7 @@
   </div>
   <div class="footer-bottom">
     <p>© 2026 Irish Travel Advice Mapped. Not an official government website.</p>
-    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail" target="_blank" rel="noopener noreferrer">@MacArdghail</a></p>
+    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail" target="_blank" rel="noopener noreferrer" aria-label="Visit developer's GitHub profile">@MacArdghail</a></p>
   </div>
 </footer>
 
