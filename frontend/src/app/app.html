@@ -37,33 +37,74 @@
 
 <div class="countries-section">
   <h2 class="countries-title">All Travel Advisories</h2>
-  <p class="countries-count">Showing {{ countries.length }} destinations</p>
-  <div class="countries-grid">
-@for (country of countries; track country.slug; let i = $index) {
-  <a href="https://www.ireland.ie/en/dfa/overseas-travel/advice/{{ country.slug }}/" target="_blank" rel="noopener noreferrer" class="country-item" [attr.data-status]="country.status">
-    <div class="country-status-row">
-      @if (country.status === "normal-precautions") {
-        <ion-icon name="checkmark-circle" class="status-icon" style="color: #10b981;"></ion-icon>
-      } @else if (country.status === "high-degree-of-caution"){
-        <ion-icon name="alert-circle" class="status-icon" style="color: #f59e0b;"></ion-icon>
-      } @else if(country.status === "avoid-non-essential-travel"){
-        <ion-icon name="warning" class="status-icon" style="color: #f97316;"></ion-icon>
-      } @else if(country.status === "do-not-travel") {
-        <svg xmlns="http://www.w3.org/2000/svg" class="status-icon" fill="#dc2626" viewBox="0 0 18 18">
-          <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-        </svg>
-      }
-      <span class="country-status-text" [attr.data-status]="country.status">{{ 'levels.' + country.status | translate }}</span>
-    </div>
-    <span class="country-name">{{ 'countries.' + country.slug | translate }}</span>
-    <div class="country-link-arrow">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M5 5 L15 5 L15 15 Z"/>
+  <div class="filters-container">
+    <div class="search-container">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
       </svg>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search a destination" 
+        [(ngModel)]="searchQuery"
+        (input)="filterCountries()"
+      />
     </div>
-  </a>
-}
+
+    <div class="level-filter">
+      <select 
+        class="level-select" 
+        [(ngModel)]="selectedLevel"
+        (change)="filterCountries()"
+      >
+        <option value="all">All Levels</option>
+        <option value="normal-precautions">{{ 'levels.normal-precautions' | translate }}</option>
+        <option value="high-degree-of-caution">{{ 'levels.high-degree-of-caution' | translate }}</option>
+        <option value="avoid-non-essential-travel">{{ 'levels.avoid-non-essential-travel' | translate }}</option>
+        <option value="do-not-travel">{{ 'levels.do-not-travel' | translate }}</option>
+      </select>
+    </div>
+
+    <button class="group-toggle" (click)="toggleGrouping()" [class.active]="groupByContinent">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+        <path d="M2 12h20"></path>
+      </svg>
+      Group by Continent
+    </button>
   </div>
+
+  <p class="countries-count">Showing {{ filteredCountries.length }} of {{ countries.length }} destinations</p>
+  
+  @if (filteredCountries.length === 0 || (groupByContinent && continents.length === 0)) {
+    <div class="no-results">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <h3>No destinations found</h3>
+      <p>Try adjusting your search or filters</p>
+    </div>
+  } @else if (!groupByContinent) {
+    <div class="countries-grid">
+      @for (country of filteredCountries; track country.slug) {
+        <app-country-card [country]="country" />
+      }
+    </div>
+  } @else {
+    @for (continent of continents; track continent) {
+      <div class="continent-group">
+        <h3 class="continent-title">{{ continent }} ({{ groupedCountries[continent].length }})</h3>
+        <div class="countries-grid">
+          @for (country of groupedCountries[continent]; track country.slug) {
+            <app-country-card [country]="country" />
+          }
+        </div>
+      </div>
+    }
+  }
 </div>
 
 <footer class="footer">
@@ -85,7 +126,7 @@
   </div>
   <div class="footer-bottom">
     <p>© 2026 Irish Travel Advice Mapped. Not an official government website.</p>
-    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail">@MacArdghail</a></p>
+    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail" target="_blank" rel="noopener noreferrer">@MacArdghail</a></p>
   </div>
 </footer>
 

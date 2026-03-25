@@ -3,9 +3,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from './translate.pipe';
+import { TranslateService } from './translate.service';
 import { MapService } from './map.service';
-import { inject } from '@vercel/analytics';
+import { groupByContinent } from './continent.utils';
+import { CountryCardComponent } from './country-card';
 
 interface CountryData {
   [key: string]: string
@@ -13,7 +16,7 @@ interface CountryData {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, TranslatePipe],
+  imports: [RouterOutlet, CommonModule, TranslatePipe, FormsModule, CountryCardComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -23,16 +26,23 @@ export class App {
   
   protected title = 'Irish Travel Advice Map';
   countries: { slug: string; status: string }[] = []
+  filteredCountries: { slug: string; status: string }[] = []
+  groupedCountries: { [continent: string]: { slug: string; status: string }[] } = {};
+  continents: string[] = [];
+  searchQuery: string = '';
+  selectedLevel: string = 'all';
+  groupByContinent: boolean = false;
   lastUpdated: string = '';
 
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private mapService: MapService
+    private mapService: MapService,
+    private translateService: TranslateService
   ) {
     // Initialize Vercel Analytics
     if (isPlatformBrowser(this.platformId)) {
-      inject();
+      import('@vercel/analytics').then(({ inject }) => inject());
     }
   }
 
@@ -53,6 +63,8 @@ export class App {
           status
         })
       ).sort((a, b) => a.slug.localeCompare(b.slug));
+      
+      this.filteredCountries = [...this.countries];
       
       // Add advisories to map if it's already initialized
       if (this.mapContainer) {
@@ -75,5 +87,43 @@ export class App {
 
   openDFAWebsite() {
     window.open('https://www.ireland.ie/en/dfa/overseas-travel/advice/', '_blank');
+  }
+
+  filterCountries() {
+    const query = this.searchQuery.toLowerCase().trim();
+    
+    let filtered = [...this.countries];
+
+    // Filter by level
+    if (this.selectedLevel !== 'all') {
+      filtered = filtered.filter(country => country.status === this.selectedLevel);
+    }
+
+    // Filter by search query
+    if (query) {
+      filtered = filtered.filter(country => {
+        const translatedName = this.translateService.translate(`countries.${country.slug}`).toLowerCase();
+        return translatedName.includes(query) || country.slug.includes(query);
+      });
+    }
+
+    this.filteredCountries = filtered;
+    
+    // Update grouped view
+    if (this.groupByContinent) {
+      this.updateGroupedCountries();
+    }
+  }
+
+  updateGroupedCountries() {
+    this.groupedCountries = groupByContinent(this.filteredCountries);
+    this.continents = Object.keys(this.groupedCountries).sort();
+  }
+
+  toggleGrouping() {
+    this.groupByContinent = !this.groupByContinent;
+    if (this.groupByContinent) {
+      this.updateGroupedCountries();
+    }
   }
 }
