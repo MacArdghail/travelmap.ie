@@ -21,17 +21,26 @@ jobs:
           playwright install chromium
           playwright install-deps
 
-      - run: |
+      - name: Scrape travel advice
+        run: |
           python travel_advice.py > frontend/public/travel_advice.json
 
-      - run: |
+      - name: Archive daily snapshot
+        run: |
+          DATE=$(date -u +"%Y-%m-%d")
+          mkdir -p frontend/public/history
+          cp frontend/public/travel_advice.json frontend/public/history/${DATE}.json
+
+      - name: Update metadata with last updated time
+        run: |
           echo "{\"lastUpdated\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > frontend/public/metadata.json
 
-      - run: |
+      - name: Commit changes
+        run: |
           git add .
           git diff --cached --quiet || (
             git config user.name "github-actions[bot]" &&
             git config user.email "github-actions[bot]@users.noreply.github.com" &&
-            git commit -m "Update travel advisories" &&
+            git commit -m "Update travel advisories - $(date -u +"%Y-%m-%d")" &&
             git push
           )
