@@ -5,6 +5,37 @@
     "avoid-non-essential-travel": "Seachain Taisteal Neamhriachtanach",
     "do-not-travel": "Ná Taistil"
   },
+  "ui": {
+    "search-placeholder": "Cuardaigh tír...",
+    "all-levels": "Gach Leibhéil",
+    "group-by-continent": "Grúpáil de réir Ilchríoch",
+    "all-travel-advisories": "Gach Comhairle Taistil",
+    "showing": "Ag taispeáint",
+    "of": "as",
+    "destinations": "ceann scríbeanna",
+    "last-updated": "Nuashonraithe deireanach",
+    "no-destinations-found": "Níor aimsíodh aon cheann scríbe",
+    "try-adjusting": "Bain triail as do chuardach nó do scagairí a choigeartú",
+    "site-title": "Comhairle Taistil na hÉireann ar Léarscáil",
+    "visit-dfa": "Tabhair cuairt ar DFA oifigiúil",
+    "footer-description": "Comhairlí taistil oifigiúla na hÉireann á léiriú ar léarscáil idirghníomhach. Sonraí bailithe go díreach ó Roinn Gnóthaí Eachtracha.",
+    "github": "GitHub",
+    "disclaimer-title": "Séanadh:",
+    "disclaimer-text": "Is suíomh gréasáin neamhspleách é seo agus níl sé bainteach le Roinn Gnóthaí Eachtracha na hÉireann. Déantar sonraí comhairle taistil go léir a bhailiú ó fhoinsí oifigiúla an DFA agus a thaispeáint ar léarscáil le haghaidh amhairc níos éasca. Fíoraigh comhairle taistil reatha i gcónaí go díreach ag",
+    "disclaimer-link-text": "www.ireland.ie",
+    "before-travel": "sula dtéann tú ar thuras.",
+    "copyright": "© 2026 Comhairle Taistil na hÉireann ar Léarscáil. Ní suíomh gréasáin oifigiúil rialtais é.",
+    "made-with": "Déanta le ❤️ ó 🇮🇪 ag"
+  },
+  "continents": {
+    "Africa": "An Afraic",
+    "Asia": "An Áise",
+    "Europe": "An Eoraip",
+    "North America": "Meiriceá Thuaidh",
+    "South America": "Meiriceá Theas",
+    "Oceania": "An Aigéine",
+    "Antarctica": "An Antartaice"
+  },
   "countries": {
     "marshall-islands": {
       "name": "Na Hoileain Marshall",

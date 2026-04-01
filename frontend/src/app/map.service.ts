@@ -11,6 +11,7 @@ export class MapService {
   private L: LeafletModule | null = null;
   private map: any = null;
   private geoJsonLayer: any = null;
+  private currentCountries: { slug: string; status: string }[] = [];
 
   constructor(private translateService: TranslateService) {}
 
@@ -44,6 +45,9 @@ export class MapService {
 
   addCountryAdvisories(countries: { slug: string; status: string }[]) {
     if (!this.map || !this.L) return;
+
+    // Store countries for re-rendering on language change
+    this.currentCountries = countries;
 
     if (this.geoJsonLayer) {
       this.geoJsonLayer.remove();
@@ -92,7 +96,7 @@ export class MapService {
                 <a href="https://www.ireland.ie" target="_blank" rel="noopener noreferrer">Visit Ireland.ie</a>
               `);
             } else if (advisory) {
-              const adviceUrl = `https://www.ireland.ie/en/dfa/overseas-travel/advice/${advisory.slug}/`;
+              const adviceUrl = this.getDFAUrl(slug);
               const translatedStatus = this.translateService.translate(`levels.${advisory.status}`);
               layer.bindPopup(`
                 <strong>${translatedCountryName}</strong><br>
@@ -129,7 +133,7 @@ export class MapService {
       if (!advisory || !this.L) return;
 
       const color = getMarkerColor(advisory.status);
-      const adviceUrl = `https://www.ireland.ie/en/dfa/overseas-travel/advice/${advisory.slug}/`;
+      const adviceUrl = this.getDFAUrl(territory.slug);
       const translatedStatus = this.translateService.translate(`levels.${advisory.status}`);
       const translatedTerritoryName = this.translateService.translate(`countries.${territory.slug}`);
       
@@ -149,5 +153,28 @@ export class MapService {
       `);
       marker.addTo(this.map);
     });
+  }
+
+  private getDFAUrl(countrySlug: string): string {
+    const currentLang = this.translateService.getCurrentLang();
+    const langPath = currentLang === 'ga' ? 'ga/dfa/taisteal-thar-lear/comhairle' : 'en/dfa/overseas-travel/advice';
+    
+    // Get the full translation object
+    const translation = this.translateService.translate(`countries.${countrySlug}`, true);
+    let slug = countrySlug;
+    
+    // If translation is an object with slug property, use it
+    if (typeof translation === 'object' && translation !== null && 'slug' in translation) {
+      slug = translation.slug;
+    }
+    
+    return `https://www.ireland.ie/${langPath}/${slug}/`;
+  }
+
+  // Method to refresh map when language changes
+  refreshMapLanguage() {
+    if (this.currentCountries.length > 0) {
+      this.addCountryAdvisories(this.currentCountries);
+    }
   }
 }

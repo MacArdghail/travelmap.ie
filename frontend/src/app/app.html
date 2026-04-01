@@ -1,6 +1,11 @@
 <header class="header">
-  <h1>Irish Travel Advice Mapped</h1>
-  <button (click)="openDFAWebsite()">Visit Official DFA Advice</button>
+  <h1>{{ 'ui.site-title' | translate }}</h1>
+  <div class="header-actions">
+    <button class="language-toggle" (click)="switchLanguage(currentLang === 'en' ? 'ga' : 'en')">
+      {{ currentLang === 'en' ? 'Gaeilge' : 'English' }}
+    </button>
+    <button class="visit-dfa" (click)="openDFAWebsite()">{{ 'ui.visit-dfa' | translate }}</button>
+  </div>
 </header>
 
 <main>
@@ -31,13 +36,13 @@
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        <span>LAST UPDATED: {{ lastUpdated }}</span>
+        <span>{{ 'ui.last-updated' | translate | uppercase }}: {{ lastUpdated }}</span>
       </div>
     }
   </div>
 
   <div class="countries-section">
-  <h2 class="countries-title">All Travel Advisories</h2>
+  <h2 class="countries-title">{{ 'ui.all-travel-advisories' | translate }}</h2>
   <div class="filters-container">
     <div class="search-container">
       <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -47,7 +52,7 @@
       <input 
         type="text" 
         class="search-input" 
-        placeholder="Search a destination" 
+        [placeholder]="'ui.search-placeholder' | translate"
         [(ngModel)]="searchQuery"
         (input)="filterCountries()"
       />
@@ -61,7 +66,7 @@
         [(ngModel)]="selectedLevel"
         (change)="filterCountries()"
       >
-        <option value="all">All Levels</option>
+        <option value="all">{{ 'ui.all-levels' | translate }}</option>
         <option value="normal-precautions">{{ 'levels.normal-precautions' | translate }}</option>
         <option value="high-degree-of-caution">{{ 'levels.high-degree-of-caution' | translate }}</option>
         <option value="avoid-non-essential-travel">{{ 'levels.avoid-non-essential-travel' | translate }}</option>
@@ -75,11 +80,11 @@
         <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
         <path d="M2 12h20"></path>
       </svg>
-      Group by Continent
+      {{ 'ui.group-by-continent' | translate }}
     </button>
   </div>
 
-  <p class="countries-count">Showing {{ filteredCountries.length }} of {{ countries.length }} destinations</p>
+  <p class="countries-count">{{ 'ui.showing' | translate }} {{ filteredCountries.length }} {{ 'ui.of' | translate }} {{ countries.length }} {{ 'ui.destinations' | translate }}</p>
   
   @if (filteredCountries.length === 0 || (groupByContinent && continents.length === 0)) {
     <div class="no-results">
@@ -87,8 +92,8 @@
         <circle cx="11" cy="11" r="8"></circle>
         <path d="m21 21-4.35-4.35"></path>
       </svg>
-      <h3>No destinations found</h3>
-      <p>Try adjusting your search or filters</p>
+      <h3>{{ 'ui.no-destinations-found' | translate }}</h3>
+      <p>{{ 'ui.try-adjusting' | translate }}</p>
     </div>
   } @else if (!groupByContinent) {
     <div class="countries-grid">
@@ -99,7 +104,7 @@
   } @else {
     @for (continent of continents; track continent) {
       <div class="continent-group">
-        <h3 class="continent-title">{{ continent }} ({{ groupedCountries[continent].length }})</h3>
+        <h3 class="continent-title">{{ 'continents.' + continent | translate }} ({{ groupedCountries[continent].length }})</h3>
         <div class="countries-grid">
           @for (country of groupedCountries[continent]; track country.slug) {
             <app-country-card [country]="country" />
@@ -114,23 +119,21 @@
 <footer class="footer">
   <div class="footer-content">
     <div class="footer-left">
-      <h3>Irish Travel Advice Mapped</h3>
-      <p>Visualizing official Irish travel advisories on an interactive map. Data taken directly from the Department of Foreign Affairs.</p>
+      <h3>{{ 'ui.site-title' | translate }}</h3>
+      <p>{{ 'ui.footer-description' | translate }}</p>
     </div>
     <div class="footer-right">
-      <a href="https://github.com/MacArdghail/traveladvicemap" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://github.com/MacArdghail/traveladvicemap" target="_blank" rel="noopener noreferrer" aria-label="Visit project on GitHub">{{ 'ui.github' | translate }}</a>
     </div>
   </div>
   <div class="disclaimer">
-    <strong>Disclaimer:</strong> This is an independent website and is not affiliated with the Irish Department of Foreign Affairs. 
-    All travel advisory data is scraped from official DFA sources and displayed on a map for easier visualization. 
-    Always verify current travel advice directly at 
-    <a href="https://www.ireland.ie/en/dfa/overseas-travel/advice/" target="_blank" rel="noopener noreferrer">www.ireland.ie</a> 
-    before making travel decisions.
+    <strong>{{ 'ui.disclaimer-title' | translate }}</strong> {{ 'ui.disclaimer-text' | translate }}
+    <a href="https://www.ireland.ie/en/dfa/overseas-travel/advice/" target="_blank" rel="noopener noreferrer">{{ 'ui.disclaimer-link-text' | translate }}</a> 
+    {{ 'ui.before-travel' | translate }}
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Irish Travel Advice Mapped. Not an official government website.</p>
-    <p>Made with ❤️ from 🇮🇪 by <a class="MacArdghail" href="https://github.com/MacArdghail" target="_blank" rel="noopener noreferrer" aria-label="Visit developer's GitHub profile">@MacArdghail</a></p>
+    <p>{{ 'ui.copyright' | translate }}</p>
+    <p>{{ 'ui.made-with' | translate }} <a class="MacArdghail" href="https://github.com/MacArdghail" target="_blank" rel="noopener noreferrer" aria-label="Visit developer's GitHub profile">@MacArdghail</a></p>
   </div>
 </footer>
 
