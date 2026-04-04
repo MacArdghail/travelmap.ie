@@ -5,6 +5,41 @@
     "avoid-non-essential-travel": "Avoid Non-Essential Travel",
     "do-not-travel": "Do Not Travel"
   },
+  "ui": {
+    "search-placeholder": "Search for a country...",
+    "all-levels": "All Levels",
+    "group-by-continent": "Group by Continent",
+    "all-travel-advisories": "All Travel Advisories",
+    "showing": "Showing",
+    "of": "of",
+    "destinations": "destinations",
+    "last-updated": "Last Updated",
+    "no-destinations-found": "No destinations found",
+    "try-adjusting": "Try adjusting your search or filters",
+    "site-title": "Irish Travel Advice Mapped",
+    "visit-dfa": "Visit Official DFA Advice",
+    "visit-dfa-short": "Official DFA",
+    "footer-description": "Visualizing official Irish travel advisories on an interactive map. Data taken directly from the Department of Foreign Affairs.",
+    "github": "GitHub",
+    "disclaimer-title": "Disclaimer:",
+    "disclaimer-text": "This is an independent website and is not affiliated with the Irish Department of Foreign Affairs. All travel advisory data is scraped from official DFA sources and displayed on a map for easier visualization. Always verify current travel advice directly at",
+    "disclaimer-link-text": "www.ireland.ie",
+    "before-travel": "before making travel decisions.",
+    "copyright": "© 2026 Irish Travel Advice Mapped. Not an official government website.",
+    "made-with": "Made with ❤️ from 🇮🇪 by",
+    "view-official-advice": "View Official Advice",
+    "visit-ireland": "Visit Ireland.ie",
+    "no-advisory-data": "No advisory data"
+  },
+  "continents": {
+    "Africa": "Africa",
+    "Asia": "Asia",
+    "Europe": "Europe",
+    "North America": "North America",
+    "South America": "South America",
+    "Oceania": "Oceania",
+    "Antarctica": "Antarctica"
+  },
   "countries": {
     "marshall-islands": "Marshall Islands",
     "oman": "Oman",
@@ -233,6 +268,8 @@
     "southern-patagonian-ice-field": "Southern Patagonian Ice Field",
     "bir-tawil": "Bir Tawil",
     "antarctica": "Antarctica",
+    "falkland-islands": "Falkland Islands",
+    "south-georgia-and-the-islands": "South Georgia and the South Sandwich Islands",
     "new-caledonia": "New Caledonia",
     "curaao": "Curaçao",
     "aruba": "Aruba",
@@ -250,6 +287,16 @@
     "ashmore-and-cartier-islands": "Ashmore and Cartier Islands",
     "bajo-nuevo-bank-petrel-is": "Bajo Nuevo Bank (Petrel Is.)",
     "serranilla-bank": "Serranilla Bank",
-    "scarborough-reef": "Scarborough Reef"
+    "scarborough-reef": "Scarborough Reef",
+    "dhekelia-sovereign-base-area": "Dhekelia Sovereign Base Area",
+    "gibraltar": "Gibraltar",
+    "akrotiri-sovereign-base-area": "Akrotiri Sovereign Base Area",
+    "pitcairn-islands": "Pitcairn Islands",
+    "united-states-minor-outlying-islands": "United States Minor Outlying Islands",
+    "saint-helena": "Saint Helena",
+    "british-indian-ocean-territory": "British Indian Ocean Territory",
+    "american-samoa": "American Samoa",
+    "guam": "Guam",
+    "northern-mariana-islands": "Northern Mariana Islands"
   }
 }

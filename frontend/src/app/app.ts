@@ -33,6 +33,8 @@ export class App {
   selectedLevel: string = 'all';
   groupByContinent: boolean = false;
   lastUpdated: string = '';
+  currentLang: string = '';
+  private lastUpdatedDate: Date | null = null;
 
   constructor(
     private http: HttpClient,
@@ -44,16 +46,15 @@ export class App {
     if (isPlatformBrowser(this.platformId)) {
       import('@vercel/analytics').then(({ inject }) => inject());
     }
+    
+    // Get the current language (already loaded from localStorage in TranslateService)
+    this.currentLang = this.translateService.getCurrentLang();
   }
 
   ngOnInit() {
     this.http.get<{ lastUpdated: string }>('/metadata.json').subscribe((metadata) => {
-      const date = new Date(metadata.lastUpdated);
-      this.lastUpdated = date.toLocaleDateString('en-US', { 
-        month: 'long', 
-        day: 'numeric', 
-        year: 'numeric' 
-      }).toUpperCase();
+      this.lastUpdatedDate = new Date(metadata.lastUpdated);
+      this.updateLastUpdatedText();
     })
 
     this.http.get<CountryData>('/travel_advice.json').subscribe((statusData) => {
@@ -86,7 +87,10 @@ export class App {
   }
 
   openDFAWebsite() {
-    window.open('https://www.ireland.ie/en/dfa/overseas-travel/advice/', '_blank');
+    const url = this.currentLang === 'ga' 
+      ? 'https://www.ireland.ie/ga/dfa/taisteal-thar-lear/comhairle/'
+      : 'https://www.ireland.ie/en/dfa/overseas-travel/advice/';
+    window.open(url, '_blank');
   }
 
   filterCountries() {
@@ -124,6 +128,44 @@ export class App {
     this.groupByContinent = !this.groupByContinent;
     if (this.groupByContinent) {
       this.updateGroupedCountries();
+    }
+  }
+
+  switchLanguage(lang: string) {
+    this.currentLang = lang;
+    this.translateService.setLanguage(lang);
+    
+    // Save language preference to localStorage
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('preferredLanguage', lang);
+    }
+    
+    // Refresh map to update popups with new language
+    this.mapService.refreshMapLanguage();
+    
+    // Update date format
+    this.updateLastUpdatedText();
+  }
+
+  private updateLastUpdatedText() {
+    if (!this.lastUpdatedDate) return;
+    
+    const day = this.lastUpdatedDate.getDate();
+    const year = this.lastUpdatedDate.getFullYear();
+    const monthIndex = this.lastUpdatedDate.getMonth();
+    
+    if (this.currentLang === 'ga') {
+      const irishMonths = [
+        'Eanáir', 'Feabhra', 'Márta', 'Aibreán', 'Bealtaine', 'Meitheamh',
+        'Iúil', 'Lúnasa', 'Meán Fómhair', 'Deireadh Fómhair', 'Samhain', 'Nollaig'
+      ];
+      this.lastUpdated = `${day} ${irishMonths[monthIndex]} ${year}`.toUpperCase();
+    } else {
+      this.lastUpdated = this.lastUpdatedDate.toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric' 
+      }).toUpperCase();
     }
   }
 }

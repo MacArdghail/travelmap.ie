@@ -11,6 +11,7 @@ export class MapService {
   private L: LeafletModule | null = null;
   private map: any = null;
   private geoJsonLayer: any = null;
+  private currentCountries: { slug: string; status: string }[] = [];
 
   constructor(private translateService: TranslateService) {}
 
@@ -44,6 +45,9 @@ export class MapService {
 
   addCountryAdvisories(countries: { slug: string; status: string }[]) {
     if (!this.map || !this.L) return;
+
+    // Store countries for re-rendering on language change
+    this.currentCountries = countries;
 
     if (this.geoJsonLayer) {
       this.geoJsonLayer.remove();
@@ -87,20 +91,23 @@ export class MapService {
 
             // Ireland
             if (slug === 'ireland') {
+              const visitIrelandText = this.translateService.translate('ui.visit-ireland');
               layer.bindPopup(`
                 <strong>${translatedCountryName}</strong><br>
-                <a href="https://www.ireland.ie" target="_blank" rel="noopener noreferrer">Visit Ireland.ie</a>
+                <a href="https://www.ireland.ie" target="_blank" rel="noopener noreferrer">${visitIrelandText}</a>
               `);
             } else if (advisory) {
-              const adviceUrl = `https://www.ireland.ie/en/dfa/overseas-travel/advice/${advisory.slug}/`;
+              const adviceUrl = this.getDFAUrl(slug);
               const translatedStatus = this.translateService.translate(`levels.${advisory.status}`);
+              const viewAdviceText = this.translateService.translate('ui.view-official-advice');
               layer.bindPopup(`
                 <strong>${translatedCountryName}</strong><br>
                 ${translatedStatus}<br>
-                <a href="${adviceUrl}" target="_blank" rel="noopener noreferrer">View Official Advice</a>
+                <a href="${adviceUrl}" target="_blank" rel="noopener noreferrer">${viewAdviceText}</a>
               `);
             } else {
-              layer.bindPopup(`<strong>${translatedCountryName}</strong><br><em>No advisory data</em>`);
+              const noDataText = this.translateService.translate('ui.no-advisory-data');
+              layer.bindPopup(`<strong>${translatedCountryName}</strong><br><em>${noDataText}</em>`);
             }
 
             layer.on('mouseover', (e: any) => {
@@ -129,9 +136,10 @@ export class MapService {
       if (!advisory || !this.L) return;
 
       const color = getMarkerColor(advisory.status);
-      const adviceUrl = `https://www.ireland.ie/en/dfa/overseas-travel/advice/${advisory.slug}/`;
+      const adviceUrl = this.getDFAUrl(territory.slug);
       const translatedStatus = this.translateService.translate(`levels.${advisory.status}`);
       const translatedTerritoryName = this.translateService.translate(`countries.${territory.slug}`);
+      const viewAdviceText = this.translateService.translate('ui.view-official-advice');
       
       const marker = this.L.circleMarker([territory.coords[0], territory.coords[1]], {
         radius: 8,
@@ -145,9 +153,32 @@ export class MapService {
       marker.bindPopup(`
         <strong>${translatedTerritoryName}</strong><br>
         ${translatedStatus}<br>
-        <a href="${adviceUrl}" target="_blank" rel="noopener noreferrer">View Official Advice</a>
+        <a href="${adviceUrl}" target="_blank" rel="noopener noreferrer">${viewAdviceText}</a>
       `);
       marker.addTo(this.map);
     });
+  }
+
+  private getDFAUrl(countrySlug: string): string {
+    const currentLang = this.translateService.getCurrentLang();
+    const langPath = currentLang === 'ga' ? 'ga/dfa/taisteal-thar-lear/comhairle' : 'en/dfa/overseas-travel/advice';
+    
+    // Get the full translation object
+    const translation = this.translateService.translate(`countries.${countrySlug}`, true);
+    let slug = countrySlug;
+    
+    // If translation is an object with slug property, use it
+    if (typeof translation === 'object' && translation !== null && 'slug' in translation) {
+      slug = translation.slug;
+    }
+    
+    return `https://www.ireland.ie/${langPath}/${slug}/`;
+  }
+
+  // Method to refresh map when language changes
+  refreshMapLanguage() {
+    if (this.currentCountries.length > 0) {
+      this.addCountryAdvisories(this.currentCountries);
+    }
   }
 }
