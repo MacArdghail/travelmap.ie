@@ -10,9 +10,9 @@ An interactive world map visualizing official travel advisories from Ireland's D
 
 ## Live map
 
-[See here for the live interactive map](https://traveladvicemap.ie)
+[See here for the live interactive map](https://travelmap.ie)
 
-[![Irish Travel Advice Map](travelmap.png)](https://traveladvicemap.ie)
+[![Irish Travel Advice Map](travelmap.png)](https://travelmap.ie)
 
 ## Data collection
 
